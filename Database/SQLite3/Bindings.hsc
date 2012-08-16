@@ -3,21 +3,19 @@
 {-# OPTIONS -fno-warn-name-shadowing #-}
 module Database.SQLite3.Bindings (
     -- * Types
-    Database(..),
     CDatabase,
-    Statement(..),
     CStatement,
 
     -- ** Enumerations
+    CError(..),
+    CColumnType(..),
 
     -- *** Error
     Error(..),
-    CError(..),
     decodeError,
 
     -- *** ColumnType
     ColumnType(..),
-    CColumnType(..),
     decodeColumnType,
 
     -- ** Miscellaneous
@@ -26,15 +24,19 @@ module Database.SQLite3.Bindings (
 
     -- * Foreign functions
 
+    -- ** Error Codes And Messages
+    -- | <http://www.sqlite.org/c3ref/errcode.html>
+    c_sqlite3_errmsg,
+
+    -- ** Compiling an SQL Statement
+    -- | <http://www.sqlite.org/c3ref/prepare.html>
+    c_sqlite3_prepare_v2,
 ) where
 
 #include "sqlite3.h"
 
 import Foreign
 import Foreign.C
-
-newtype Database  = Database  (Ptr CDatabase)
-newtype Statement = Statement (Ptr CStatement)
 
 -- Result code documentation copied from <http://www.sqlite.org/c3ref/c_abort.html>
 
@@ -76,20 +78,21 @@ data ColumnType = IntegerColumn
                 | NullColumn
                   deriving (Eq, Show)
 
--- | @sqlite3@
+-- | @sqlite3@  <http://www.sqlite.org/c3ref/sqlite3.html>
 data CDatabase
 
--- | @sqlite3_stmt@
+-- | @sqlite3_stmt@  <http://www.sqlite.org/c3ref/stmt.html>
 data CStatement
 
 -- | @Ptr CDestructor@ = @sqlite3_destructor_type@.
--- See <http://www.sqlite.org/c3ref/c_static.html>
+-- <http://www.sqlite.org/c3ref/c_static.html>
 data CDestructor
 
 c_SQLITE_TRANSIENT :: Ptr CDestructor
 c_SQLITE_TRANSIENT = intPtrToPtr (-1)
 
 
+-- | <http://www.sqlite.org/c3ref/c_abort.html>
 newtype CError = CError CInt
 
 decodeError :: CError -> Error
@@ -126,6 +129,7 @@ decodeError (CError n) = case n of
     _                          -> Prelude.error $ "decodeError " ++ show n
 
 
+-- | <http://www.sqlite.org/c3ref/c_blob.html>
 newtype CColumnType = CColumnType CInt
 
 decodeColumnType :: CColumnType -> ColumnType
