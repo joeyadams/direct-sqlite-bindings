@@ -89,7 +89,7 @@ data CStatement
 --
 -- Parameter indices start from 1.
 newtype CParamIndex = CParamIndex CInt
-    deriving (Eq, Ord)
+    deriving (Eq, Ord, Show)
 
 -- | @\[1..999\]@. <http://www.sqlite.org/limits.html#max_variable_number>
 instance Bounded CParamIndex where
@@ -100,7 +100,7 @@ instance Bounded CParamIndex where
 --
 -- Column indices start from 0.
 newtype CColumnIndex = CColumnIndex CInt
-    deriving (Eq, Ord)
+    deriving (Eq, Ord, Show)
 
 -- | @\[0..1999\]@.  <http://www.sqlite.org/limits.html#max_column>
 instance Bounded CColumnIndex where
@@ -109,7 +109,7 @@ instance Bounded CColumnIndex where
 
 -- | Number of columns in a result set.
 newtype CColumnCount = CColumnCount CInt
-    deriving (Eq, Ord)
+    deriving (Eq, Ord, Show)
 
 -- | @\[0..2000\]@.  <http://www.sqlite.org/limits.html#max_column>
 instance Bounded CColumnCount where
@@ -117,7 +117,7 @@ instance Bounded CColumnCount where
     maxBound = CColumnCount 2000
 
 newtype CNumBytes = CNumBytes CInt
-    deriving (Eq, Ord)
+    deriving (Eq, Ord, Show)
 
 -- | <http://www.sqlite.org/c3ref/c_static.html>
 --
@@ -130,6 +130,7 @@ c_SQLITE_TRANSIENT = intPtrToPtr (-1)
 
 -- | <http://www.sqlite.org/c3ref/c_abort.html>
 newtype CError = CError CInt
+    deriving Show
 
 decodeError :: CError -> Maybe Error
 decodeError (CError n) = case n of
@@ -167,6 +168,7 @@ decodeError (CError n) = case n of
 
 -- | <http://www.sqlite.org/c3ref/c_blob.html>
 newtype CColumnType = CColumnType CInt
+    deriving Show
 
 decodeColumnType :: CColumnType -> Maybe ColumnType
 decodeColumnType (CColumnType n) = case n of
