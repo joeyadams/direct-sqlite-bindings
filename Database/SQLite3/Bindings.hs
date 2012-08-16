@@ -90,7 +90,7 @@ foreign import ccall "sqlite3_bind_parameter_name"
 
 -- | <http://www.sqlite.org/c3ref/column_count.html>
 foreign import ccall "sqlite3_column_count"
-    c_sqlite3_column_count :: Ptr CStatement -> IO Int
+    c_sqlite3_column_count :: Ptr CStatement -> IO CColumnCount
 
 
 foreign import ccall "sqlite3_bind_blob"

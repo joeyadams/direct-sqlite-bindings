@@ -20,6 +20,7 @@ module Database.SQLite3.Bindings.Types (
     -- * Indices
     CParamIndex(..),
     CColumnIndex(..),
+    CColumnCount(..),
 
     -- ** Miscellaneous
     CDestructor,
@@ -94,16 +95,25 @@ instance Bounded CParamIndex where
     minBound = CParamIndex 1
     maxBound = CParamIndex 999
 
--- | Either an index of a column in a result set, or a number of columns.
+-- | Index of a column in a result set.
 --
 -- Column indices start from 0.
 newtype CColumnIndex = CColumnIndex CInt
     deriving (Eq, Ord)
 
--- | @\[0..2000\]@.  <http://www.sqlite.org/limits.html#max_column>
+-- | @\[0..1999\]@.  <http://www.sqlite.org/limits.html#max_column>
 instance Bounded CColumnIndex where
     minBound = CColumnIndex 0
-    maxBound = CColumnIndex 2000
+    maxBound = CColumnIndex 1999
+
+-- | Number of columns in a result set.
+newtype CColumnCount = CColumnCount CInt
+    deriving (Eq, Ord)
+
+-- | @\[0..2000\]@.  <http://www.sqlite.org/limits.html#max_column>
+instance Bounded CColumnCount where
+    minBound = CColumnCount 0
+    maxBound = CColumnCount 2000
 
 -- | <http://www.sqlite.org/c3ref/c_static.html>
 --
