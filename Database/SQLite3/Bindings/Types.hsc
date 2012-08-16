@@ -17,6 +17,10 @@ module Database.SQLite3.Bindings.Types (
     decodeColumnType,
     ColumnType(..),
 
+    -- * Indices
+    CParamIndex(..),
+    CColumnIndex(..),
+
     -- ** Miscellaneous
     CDestructor,
     c_SQLITE_TRANSIENT,
@@ -76,6 +80,30 @@ data CDatabase
 --
 -- @CStatement@ = @sqlite3_stmt@
 data CStatement
+
+-- | Index of a parameter in a parameterized query.  See
+-- <http://www.sqlite.org/lang_expr.html#varparam> for the syntax of parameter
+-- placeholders, and how parameter indices are assigned.
+--
+-- Parameter indices start from 1.
+newtype CParamIndex = CParamIndex CInt
+    deriving (Eq, Ord)
+
+-- | @\[1..999\]@. <http://www.sqlite.org/limits.html#max_variable_number>
+instance Bounded CParamIndex where
+    minBound = CParamIndex 1
+    maxBound = CParamIndex 999
+
+-- | Either an index of a column in a result set, or a number of columns.
+--
+-- Column indices start from 0.
+newtype CColumnIndex = CColumnIndex CInt
+    deriving (Eq, Ord)
+
+-- | @\[0..2000\]@.  <http://www.sqlite.org/limits.html#max_column>
+instance Bounded CColumnIndex where
+    minBound = CColumnIndex 0
+    maxBound = CColumnIndex 2000
 
 -- | <http://www.sqlite.org/c3ref/c_static.html>
 --
