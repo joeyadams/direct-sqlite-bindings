@@ -139,78 +139,80 @@ decodeColumnType (CColumnType n) = case n of
 
 
 foreign import ccall "sqlite3_errmsg"
-  errmsgC :: Ptr CDatabase -> IO CString
+    c_sqlite3_errmsg :: Ptr CDatabase -> IO CString
 
 foreign import ccall "sqlite3_open"
-  openC :: CString -> Ptr (Ptr CDatabase) -> IO CError
+    c_sqlite3_open :: CString -> Ptr (Ptr CDatabase) -> IO CError
 
 foreign import ccall "sqlite3_close"
-  closeC :: Ptr CDatabase -> IO CError
+    c_sqlite3_close :: Ptr CDatabase -> IO CError
 
 foreign import ccall "sqlite3_prepare_v2"
-  prepareC :: Ptr CDatabase         -- ^ Database handle
-           -> CString               -- ^ SQL statement, UTF-8 encoded
-           -> Int                   -- ^ Maximum length of zSql in bytes.
-           -> Ptr (Ptr CStatement)  -- ^ OUT: Statement handle
-           -> Ptr CString           -- ^ OUT: Pointer to unused portion of zSql
-           -> IO CError
+    c_sqlite3_prepare_v2
+        :: Ptr CDatabase        -- ^ Database handle
+        -> CString              -- ^ SQL statement, UTF-8 encoded
+        -> Int                  -- ^ Maximum length of the SQL statement, in bytes.
+        -> Ptr (Ptr CStatement) -- ^ OUT: Statement handle
+        -> Ptr CString          -- ^ OUT: Pointer to unused portion of zSql
+        -> IO CError
 
 foreign import ccall "sqlite3_step"
-  stepC :: Ptr CStatement -> IO CError
+    c_sqlite3_step :: Ptr CStatement -> IO CError
 
 foreign import ccall "sqlite3_reset"
-  resetC :: Ptr CStatement -> IO CError
+    c_sqlite3_reset :: Ptr CStatement -> IO CError
 
 foreign import ccall "sqlite3_finalize"
-  finalizeC :: Ptr CStatement -> IO CError
+    c_sqlite3_finalize :: Ptr CStatement -> IO CError
 
 foreign import ccall "sqlite3_bind_parameter_count"
-  bindParameterCountC :: Ptr CStatement -> IO Int
+    c_sqlite3_bind_parameter_count :: Ptr CStatement -> IO Int
 
 foreign import ccall "sqlite3_bind_parameter_name"
-  bindParameterNameC :: Ptr CStatement -> Int -> IO CString
+    c_sqlite3_bind_parameter_name :: Ptr CStatement -> Int -> IO CString
 
 foreign import ccall "sqlite3_bind_blob"
-  bindBlobC :: Ptr CStatement
-            -> Int              -- ^ Index of the SQL parameter to be set
-            -> Ptr ()           -- ^ Value to bind to the parameter.
-                                --   C type: void *ptr
-            -> Int              -- ^ Length, in bytes
-            -> Ptr CDestructor
-            -> IO CError
+    c_sqlite3_bind_blob
+        :: Ptr CStatement
+        -> Int              -- ^ Index of the SQL parameter to be set
+        -> Ptr ()           -- ^ Value to bind to the parameter.
+                            --   C type: void *ptr
+        -> Int              -- ^ Length, in bytes
+        -> Ptr CDestructor
+        -> IO CError
 
 foreign import ccall "sqlite3_bind_double"
-  bindDoubleC :: Ptr CStatement -> Int -> Double -> IO CError
+    c_sqlite3_bind_double :: Ptr CStatement -> Int -> Double -> IO CError
 
 foreign import ccall "sqlite3_bind_int"
-  bindIntC :: Ptr CStatement -> Int -> Int -> IO CError
+    c_sqlite3_bind_int :: Ptr CStatement -> Int -> Int -> IO CError
 
 foreign import ccall "sqlite3_bind_int64"
-  bindInt64C :: Ptr CStatement -> Int -> Int64 -> IO CError
+    c_sqlite3_bind_int64 :: Ptr CStatement -> Int -> Int64 -> IO CError
 
 foreign import ccall "sqlite3_bind_null"
-  bindNullC :: Ptr CStatement -> Int -> IO CError
+    c_sqlite3_bind_null :: Ptr CStatement -> Int -> IO CError
 
 foreign import ccall "sqlite3_bind_text"
-  bindTextC :: Ptr CStatement -> Int -> CString -> Int -> Ptr CDestructor -> IO CError
+    c_sqlite3_bind_text :: Ptr CStatement -> Int -> CString -> Int -> Ptr CDestructor -> IO CError
 
 foreign import ccall "sqlite3_column_type"
-  columnTypeC :: Ptr CStatement -> Int -> IO CColumnType
+    c_sqlite3_column_type :: Ptr CStatement -> Int -> IO CColumnType
 
 foreign import ccall "sqlite3_column_bytes"
-  columnBytesC :: Ptr CStatement -> Int -> IO Int
+    c_sqlite3_column_bytes :: Ptr CStatement -> Int -> IO Int
 
 foreign import ccall "sqlite3_column_blob"
-  columnBlobC :: Ptr CStatement -> Int -> IO (Ptr ())
+    c_sqlite3_column_blob :: Ptr CStatement -> Int -> IO (Ptr ())
 
 foreign import ccall "sqlite3_column_int64"
-  columnInt64C :: Ptr CStatement -> Int -> IO Int64
+    c_sqlite3_column_int64 :: Ptr CStatement -> Int -> IO Int64
 
 foreign import ccall "sqlite3_column_double"
-  columnDoubleC :: Ptr CStatement -> Int -> IO Double
+    c_sqlite3_column_double :: Ptr CStatement -> Int -> IO Double
 
 foreign import ccall "sqlite3_column_text"
-  columnTextC :: Ptr CStatement -> Int -> IO CString
+    c_sqlite3_column_text :: Ptr CStatement -> Int -> IO CString
 
 foreign import ccall "sqlite3_column_count"
-  columnCountC :: Ptr CStatement -> IO Int
+    c_sqlite3_column_count :: Ptr CStatement -> IO Int
