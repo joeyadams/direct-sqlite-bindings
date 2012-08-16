@@ -53,6 +53,7 @@ foreign import ccall "sqlite3_close"
 foreign import ccall "sqlite3_errmsg"
     c_sqlite3_errmsg :: Ptr CDatabase -> IO CString
 
+
 -- | <http://www.sqlite.org/c3ref/prepare.html>
 foreign import ccall "sqlite3_prepare_v2"
     c_sqlite3_prepare_v2
@@ -76,17 +77,26 @@ foreign import ccall "sqlite3_finalize"
     c_sqlite3_finalize :: Ptr CStatement -> IO CError
 
 -- | <http://www.sqlite.org/c3ref/bind_parameter_count.html>
+--
+-- This returns the index of the largest (rightmost) parameter, which is not
+-- necessarily the number of parameters.  If numbered parameters like @?5@
+-- are used, there may be gaps in the list.
 foreign import ccall "sqlite3_bind_parameter_count"
-    c_sqlite3_bind_parameter_count :: Ptr CStatement -> IO Int
+    c_sqlite3_bind_parameter_count :: Ptr CStatement -> IO CParamIndex
 
 -- | <http://www.sqlite.org/c3ref/bind_parameter_name.html>
 foreign import ccall "sqlite3_bind_parameter_name"
-    c_sqlite3_bind_parameter_name :: Ptr CStatement -> Int -> IO CString
+    c_sqlite3_bind_parameter_name :: Ptr CStatement -> CParamIndex -> IO CString
+
+-- | <http://www.sqlite.org/c3ref/column_count.html>
+foreign import ccall "sqlite3_column_count"
+    c_sqlite3_column_count :: Ptr CStatement -> IO Int
+
 
 foreign import ccall "sqlite3_bind_blob"
     c_sqlite3_bind_blob
         :: Ptr CStatement
-        -> Int              -- ^ Index of the SQL parameter to be set
+        -> CParamIndex      -- ^ Index of the SQL parameter to be set
         -> Ptr ()           -- ^ Value to bind to the parameter.
                             --   C type: void *ptr
         -> Int              -- ^ Length, in bytes
@@ -94,38 +104,35 @@ foreign import ccall "sqlite3_bind_blob"
         -> IO CError
 
 foreign import ccall "sqlite3_bind_double"
-    c_sqlite3_bind_double :: Ptr CStatement -> Int -> Double -> IO CError
+    c_sqlite3_bind_double   :: Ptr CStatement -> CParamIndex -> Double -> IO CError
 
 foreign import ccall "sqlite3_bind_int"
-    c_sqlite3_bind_int :: Ptr CStatement -> Int -> Int -> IO CError
+    c_sqlite3_bind_int      :: Ptr CStatement -> CParamIndex -> Int -> IO CError
 
 foreign import ccall "sqlite3_bind_int64"
-    c_sqlite3_bind_int64 :: Ptr CStatement -> Int -> Int64 -> IO CError
+    c_sqlite3_bind_int64    :: Ptr CStatement -> CParamIndex -> Int64 -> IO CError
 
 foreign import ccall "sqlite3_bind_null"
-    c_sqlite3_bind_null :: Ptr CStatement -> Int -> IO CError
+    c_sqlite3_bind_null     :: Ptr CStatement -> CParamIndex -> IO CError
 
 foreign import ccall "sqlite3_bind_text"
-    c_sqlite3_bind_text :: Ptr CStatement -> Int -> CString -> Int -> Ptr CDestructor -> IO CError
+    c_sqlite3_bind_text     :: Ptr CStatement -> CParamIndex -> CString -> Int -> Ptr CDestructor -> IO CError
+
 
 foreign import ccall "sqlite3_column_type"
-    c_sqlite3_column_type :: Ptr CStatement -> Int -> IO CColumnType
+    c_sqlite3_column_type   :: Ptr CStatement -> CColumnIndex -> IO CColumnType
 
 foreign import ccall "sqlite3_column_bytes"
-    c_sqlite3_column_bytes :: Ptr CStatement -> Int -> IO Int
+    c_sqlite3_column_bytes  :: Ptr CStatement -> CColumnIndex -> IO Int
 
 foreign import ccall "sqlite3_column_blob"
-    c_sqlite3_column_blob :: Ptr CStatement -> Int -> IO (Ptr ())
+    c_sqlite3_column_blob   :: Ptr CStatement -> CColumnIndex -> IO (Ptr ())
 
 foreign import ccall "sqlite3_column_int64"
-    c_sqlite3_column_int64 :: Ptr CStatement -> Int -> IO Int64
+    c_sqlite3_column_int64  :: Ptr CStatement -> CColumnIndex -> IO Int64
 
 foreign import ccall "sqlite3_column_double"
-    c_sqlite3_column_double :: Ptr CStatement -> Int -> IO Double
+    c_sqlite3_column_double :: Ptr CStatement -> CColumnIndex -> IO Double
 
 foreign import ccall "sqlite3_column_text"
-    c_sqlite3_column_text :: Ptr CStatement -> Int -> IO CString
-
--- | <http://www.sqlite.org/c3ref/column_count.html>
-foreign import ccall "sqlite3_column_count"
-    c_sqlite3_column_count :: Ptr CStatement -> IO Int
+    c_sqlite3_column_text   :: Ptr CStatement -> CColumnIndex -> IO CString
