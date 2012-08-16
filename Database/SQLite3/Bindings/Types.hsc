@@ -22,7 +22,8 @@ module Database.SQLite3.Bindings.Types (
     CColumnIndex(..),
     CColumnCount(..),
 
-    -- ** Miscellaneous
+    -- * Miscellaneous
+    CNumBytes(..),
     CDestructor,
     c_SQLITE_TRANSIENT,
 ) where
@@ -114,6 +115,9 @@ newtype CColumnCount = CColumnCount CInt
 instance Bounded CColumnCount where
     minBound = CColumnCount 0
     maxBound = CColumnCount 2000
+
+newtype CNumBytes = CNumBytes CInt
+    deriving (Eq, Ord)
 
 -- | <http://www.sqlite.org/c3ref/c_static.html>
 --

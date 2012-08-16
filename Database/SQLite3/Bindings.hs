@@ -19,11 +19,11 @@ module Database.SQLite3.Bindings (
     -- * Binding Values To Prepared Statements
     -- | <http://www.sqlite.org/c3ref/bind_blob.html>
     c_sqlite3_bind_blob,
+    c_sqlite3_bind_text,
     c_sqlite3_bind_double,
     c_sqlite3_bind_int,
     c_sqlite3_bind_int64,
     c_sqlite3_bind_null,
-    c_sqlite3_bind_text,
 
     -- * Result Values From A Query
     -- | <http://www.sqlite.org/c3ref/column_blob.html>
@@ -59,7 +59,7 @@ foreign import ccall "sqlite3_prepare_v2"
     c_sqlite3_prepare_v2
         :: Ptr CDatabase        -- ^ Database handle
         -> CString              -- ^ SQL statement, UTF-8 encoded
-        -> Int                  -- ^ Maximum length of the SQL statement, in bytes.
+        -> CNumBytes            -- ^ Maximum length of the SQL statement, in bytes.
         -> Ptr (Ptr CStatement) -- ^ OUT: Statement handle
         -> Ptr CString          -- ^ OUT: Pointer to unused portion of zSql
         -> IO CError
@@ -99,15 +99,27 @@ foreign import ccall "sqlite3_bind_blob"
         -> CParamIndex      -- ^ Index of the SQL parameter to be set
         -> Ptr ()           -- ^ Value to bind to the parameter.
                             --   C type: void *ptr
-        -> Int              -- ^ Length, in bytes
+        -> CNumBytes        -- ^ Length, in bytes.  This must not be negative,
+                            --   or an assertion failure will occur.
+        -> Ptr CDestructor
+        -> IO CError
+
+foreign import ccall "sqlite3_bind_text"
+    c_sqlite3_bind_text
+        :: Ptr CStatement
+        -> CParamIndex
+        -> CString
+        -> CNumBytes        -- ^ Length, in bytes.  If this is negative,
+                            --   the length is the number of bytes up to the
+                            --   first zero terminator.
         -> Ptr CDestructor
         -> IO CError
 
 foreign import ccall "sqlite3_bind_double"
-    c_sqlite3_bind_double   :: Ptr CStatement -> CParamIndex -> Double -> IO CError
+    c_sqlite3_bind_double   :: Ptr CStatement -> CParamIndex -> CDouble -> IO CError
 
 foreign import ccall "sqlite3_bind_int"
-    c_sqlite3_bind_int      :: Ptr CStatement -> CParamIndex -> Int -> IO CError
+    c_sqlite3_bind_int      :: Ptr CStatement -> CParamIndex -> CInt -> IO CError
 
 foreign import ccall "sqlite3_bind_int64"
     c_sqlite3_bind_int64    :: Ptr CStatement -> CParamIndex -> Int64 -> IO CError
@@ -115,15 +127,12 @@ foreign import ccall "sqlite3_bind_int64"
 foreign import ccall "sqlite3_bind_null"
     c_sqlite3_bind_null     :: Ptr CStatement -> CParamIndex -> IO CError
 
-foreign import ccall "sqlite3_bind_text"
-    c_sqlite3_bind_text     :: Ptr CStatement -> CParamIndex -> CString -> Int -> Ptr CDestructor -> IO CError
-
 
 foreign import ccall "sqlite3_column_type"
     c_sqlite3_column_type   :: Ptr CStatement -> CColumnIndex -> IO CColumnType
 
 foreign import ccall "sqlite3_column_bytes"
-    c_sqlite3_column_bytes  :: Ptr CStatement -> CColumnIndex -> IO Int
+    c_sqlite3_column_bytes  :: Ptr CStatement -> CColumnIndex -> IO CNumBytes
 
 foreign import ccall "sqlite3_column_blob"
     c_sqlite3_column_blob   :: Ptr CStatement -> CColumnIndex -> IO (Ptr ())
@@ -132,7 +141,7 @@ foreign import ccall "sqlite3_column_int64"
     c_sqlite3_column_int64  :: Ptr CStatement -> CColumnIndex -> IO Int64
 
 foreign import ccall "sqlite3_column_double"
-    c_sqlite3_column_double :: Ptr CStatement -> CColumnIndex -> IO Double
+    c_sqlite3_column_double :: Ptr CStatement -> CColumnIndex -> IO CDouble
 
 foreign import ccall "sqlite3_column_text"
     c_sqlite3_column_text   :: Ptr CStatement -> CColumnIndex -> IO CString
