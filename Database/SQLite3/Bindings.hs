@@ -124,7 +124,7 @@ foreign import ccall "sqlite3_bind_text"
         -> IO CError
 
 foreign import ccall "sqlite3_bind_double"
-    c_sqlite3_bind_double   :: Ptr CStatement -> CParamIndex -> CDouble -> IO CError
+    c_sqlite3_bind_double   :: Ptr CStatement -> CParamIndex -> Double -> IO CError
 
 foreign import ccall "sqlite3_bind_int"
     c_sqlite3_bind_int      :: Ptr CStatement -> CParamIndex -> CInt -> IO CError
@@ -152,4 +152,4 @@ foreign import ccall "sqlite3_column_int64"
     c_sqlite3_column_int64  :: Ptr CStatement -> CColumnIndex -> IO Int64
 
 foreign import ccall "sqlite3_column_double"
-    c_sqlite3_column_double :: Ptr CStatement -> CColumnIndex -> IO CDouble
+    c_sqlite3_column_double :: Ptr CStatement -> CColumnIndex -> IO Double
