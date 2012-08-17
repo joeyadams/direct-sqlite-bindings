@@ -108,8 +108,7 @@ foreign import ccall "sqlite3_bind_blob"
     c_sqlite3_bind_blob
         :: Ptr CStatement
         -> CParamIndex      -- ^ Index of the SQL parameter to be set
-        -> Ptr ()           -- ^ Value to bind to the parameter.
-                            --   C type: void *ptr
+        -> Ptr a            -- ^ Value to bind to the parameter.
         -> CNumBytes        -- ^ Length, in bytes.  This must not be negative.
         -> Ptr CDestructor
         -> IO CError
@@ -144,13 +143,13 @@ foreign import ccall "sqlite3_column_bytes"
     c_sqlite3_column_bytes  :: Ptr CStatement -> CColumnIndex -> IO CNumBytes
 
 foreign import ccall "sqlite3_column_blob"
-    c_sqlite3_column_blob   :: Ptr CStatement -> CColumnIndex -> IO (Ptr ())
+    c_sqlite3_column_blob   :: Ptr CStatement -> CColumnIndex -> IO (Ptr a)
+
+foreign import ccall "sqlite3_column_text"
+    c_sqlite3_column_text   :: Ptr CStatement -> CColumnIndex -> IO CString
 
 foreign import ccall "sqlite3_column_int64"
     c_sqlite3_column_int64  :: Ptr CStatement -> CColumnIndex -> IO Int64
 
 foreign import ccall "sqlite3_column_double"
     c_sqlite3_column_double :: Ptr CStatement -> CColumnIndex -> IO CDouble
-
-foreign import ccall "sqlite3_column_text"
-    c_sqlite3_column_text   :: Ptr CStatement -> CColumnIndex -> IO CString
