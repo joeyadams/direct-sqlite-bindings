@@ -91,30 +91,15 @@ data CStatement
 newtype CParamIndex = CParamIndex CInt
     deriving (Eq, Ord, Show)
 
--- | @\[1..999\]@. <http://www.sqlite.org/limits.html#max_variable_number>
-instance Bounded CParamIndex where
-    minBound = CParamIndex 1
-    maxBound = CParamIndex 999
-
 -- | Index of a column in a result set.
 --
 -- Column indices start from 0.
 newtype CColumnIndex = CColumnIndex CInt
     deriving (Eq, Ord, Show)
 
--- | @\[0..1999\]@.  <http://www.sqlite.org/limits.html#max_column>
-instance Bounded CColumnIndex where
-    minBound = CColumnIndex 0
-    maxBound = CColumnIndex 1999
-
 -- | Number of columns in a result set.
 newtype CColumnCount = CColumnCount CInt
     deriving (Eq, Ord, Show)
-
--- | @\[0..2000\]@.  <http://www.sqlite.org/limits.html#max_column>
-instance Bounded CColumnCount where
-    minBound = CColumnCount 0
-    maxBound = CColumnCount 2000
 
 newtype CNumBytes = CNumBytes CInt
     deriving (Eq, Ord, Show)
