@@ -22,6 +22,14 @@ module Database.SQLite3.Bindings.Types (
     CColumnIndex(..),
     CColumnCount(..),
 
+    -- ** Conversion helpers
+    fromCParamIndex,
+    fromCColumnIndex,
+    fromCColumnCount,
+    toCParamIndex,
+    toCColumnIndex,
+    toCColumnCount,
+
     -- * Miscellaneous
     CNumBytes(..),
     CDestructor,
@@ -100,6 +108,24 @@ newtype CColumnIndex = CColumnIndex CInt
 -- | Number of columns in a result set.
 newtype CColumnCount = CColumnCount CInt
     deriving (Eq, Ord, Show)
+
+fromCParamIndex :: Num a => CParamIndex -> a
+fromCParamIndex (CParamIndex n) = fromIntegral n
+
+fromCColumnIndex :: Num a => CColumnIndex -> a
+fromCColumnIndex (CColumnIndex n) = fromIntegral n
+
+fromCColumnCount :: Num a => CColumnCount -> a
+fromCColumnCount (CColumnCount n) = fromIntegral n
+
+toCParamIndex :: Integral a => a -> CParamIndex
+toCParamIndex n = CParamIndex (fromIntegral n)
+
+toCColumnIndex :: Integral a => a -> CColumnIndex
+toCColumnIndex n = CColumnIndex (fromIntegral n)
+
+toCColumnCount :: Integral a => a -> CColumnCount
+toCColumnCount n = CColumnCount (fromIntegral n)
 
 newtype CNumBytes = CNumBytes CInt
     deriving (Eq, Ord, Show)
