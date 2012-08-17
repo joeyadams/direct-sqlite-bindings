@@ -4,6 +4,9 @@ synopsis:           FFI bindings for direct-sqlite
 description:
     This library provides direct access to the SQLite3 C API.  It uses basic
     features of Haskell's type system to make usage less error-prone.
+    .
+    This package is bundled with SQLite 3.7.13, so there are no
+    external dependencies.
 homepage:           https://github.com/joeyadams/direct-sqlite-bindings
 bug-reports:        https://github.com/joeyadams/direct-sqlite-bindings/issues
 license:            BSD3
