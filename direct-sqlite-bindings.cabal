@@ -31,6 +31,9 @@ library
     c-sources:
         cbits/sqlite3.c
 
+    include-dirs:
+        cbits
+
     ghc-options: -Wall -fwarn-tabs
 
     cc-options: -Wall
