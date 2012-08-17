@@ -33,6 +33,8 @@ library
 
     ghc-options: -Wall -fwarn-tabs
 
+    cc-options: -Wall
+
     build-depends: base < 5
 
     build-tools: hsc2hs
