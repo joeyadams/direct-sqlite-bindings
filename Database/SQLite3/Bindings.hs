@@ -12,6 +12,8 @@ module Database.SQLite3.Bindings (
     c_sqlite3_step,
     c_sqlite3_reset,
     c_sqlite3_finalize,
+
+    -- * Parameter and column information
     c_sqlite3_bind_parameter_count,
     c_sqlite3_bind_parameter_name,
     c_sqlite3_column_count,
@@ -72,10 +74,16 @@ foreign import ccall "sqlite3_step"
     c_sqlite3_step :: Ptr CStatement -> IO CError
 
 -- | <http://www.sqlite.org/c3ref/reset.html>
+--
+-- /Warning:/ If the most recent 'c_sqlite3_step' call failed,
+-- this will return the corresponding error code.
 foreign import ccall "sqlite3_reset"
     c_sqlite3_reset :: Ptr CStatement -> IO CError
 
 -- | <http://www.sqlite.org/c3ref/finalize.html>
+--
+-- /Warning:/ If the most recent 'c_sqlite3_step' call failed,
+-- this will return the corresponding error code.
 foreign import ccall "sqlite3_finalize"
     c_sqlite3_finalize :: Ptr CStatement -> IO CError
 
