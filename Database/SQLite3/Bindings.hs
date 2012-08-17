@@ -23,7 +23,6 @@ module Database.SQLite3.Bindings (
     c_sqlite3_bind_blob,
     c_sqlite3_bind_text,
     c_sqlite3_bind_double,
-    c_sqlite3_bind_int,
     c_sqlite3_bind_int64,
     c_sqlite3_bind_null,
 
@@ -125,9 +124,6 @@ foreign import ccall "sqlite3_bind_text"
 
 foreign import ccall "sqlite3_bind_double"
     c_sqlite3_bind_double   :: Ptr CStatement -> CParamIndex -> Double -> IO CError
-
-foreign import ccall "sqlite3_bind_int"
-    c_sqlite3_bind_int      :: Ptr CStatement -> CParamIndex -> CInt -> IO CError
 
 foreign import ccall "sqlite3_bind_int64"
     c_sqlite3_bind_int64    :: Ptr CStatement -> CParamIndex -> Int64 -> IO CError
