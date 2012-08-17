@@ -59,7 +59,10 @@ foreign import ccall "sqlite3_prepare_v2"
     c_sqlite3_prepare_v2
         :: Ptr CDatabase        -- ^ Database handle
         -> CString              -- ^ SQL statement, UTF-8 encoded
-        -> CNumBytes            -- ^ Maximum length of the SQL statement, in bytes.
+        -> CNumBytes            -- ^ Maximum length of the SQL statement,
+                                --   in bytes.  If this is negative, then the
+                                --   SQL statement is treated as a
+                                --   NUL-terminated string.
         -> Ptr (Ptr CStatement) -- ^ OUT: Statement handle
         -> Ptr CString          -- ^ OUT: Pointer to unused portion of zSql
         -> IO CError
@@ -99,8 +102,7 @@ foreign import ccall "sqlite3_bind_blob"
         -> CParamIndex      -- ^ Index of the SQL parameter to be set
         -> Ptr ()           -- ^ Value to bind to the parameter.
                             --   C type: void *ptr
-        -> CNumBytes        -- ^ Length, in bytes.  This must not be negative,
-                            --   or an assertion failure will occur.
+        -> CNumBytes        -- ^ Length, in bytes.  This must not be negative.
         -> Ptr CDestructor
         -> IO CError
 
@@ -110,8 +112,7 @@ foreign import ccall "sqlite3_bind_text"
         -> CParamIndex
         -> CString
         -> CNumBytes        -- ^ Length, in bytes.  If this is negative,
-                            --   the length is the number of bytes up to the
-                            --   first zero terminator.
+                            --   the value is treated as a NUL-terminated string.
         -> Ptr CDestructor
         -> IO CError
 
