@@ -22,18 +22,20 @@ module Database.SQLite3.Bindings.Types (
     CColumnIndex(..),
     CColumnCount(..),
 
-    -- ** Conversion helpers
-    fromCParamIndex,
-    fromCColumnIndex,
-    fromCColumnCount,
-    toCParamIndex,
-    toCColumnIndex,
-    toCColumnCount,
-
     -- * Miscellaneous
     CNumBytes(..),
     CDestructor,
     c_SQLITE_TRANSIENT,
+
+    -- * Conversion helpers
+    fromCParamIndex,
+    fromCColumnIndex,
+    fromCColumnCount,
+    fromCNumBytes,
+    toCParamIndex,
+    toCColumnIndex,
+    toCColumnCount,
+    toCNumBytes,
 ) where
 
 #include "sqlite3.h"
@@ -109,6 +111,9 @@ newtype CColumnIndex = CColumnIndex CInt
 newtype CColumnCount = CColumnCount CInt
     deriving (Eq, Ord, Show)
 
+newtype CNumBytes = CNumBytes CInt
+    deriving (Eq, Ord, Show)
+
 fromCParamIndex :: Num a => CParamIndex -> a
 fromCParamIndex (CParamIndex n) = fromIntegral n
 
@@ -117,6 +122,9 @@ fromCColumnIndex (CColumnIndex n) = fromIntegral n
 
 fromCColumnCount :: Num a => CColumnCount -> a
 fromCColumnCount (CColumnCount n) = fromIntegral n
+
+fromCNumBytes :: Num a => CNumBytes -> a
+fromCNumBytes (CNumBytes n) = fromIntegral n
 
 toCParamIndex :: Integral a => a -> CParamIndex
 toCParamIndex n = CParamIndex (fromIntegral n)
@@ -127,8 +135,8 @@ toCColumnIndex n = CColumnIndex (fromIntegral n)
 toCColumnCount :: Integral a => a -> CColumnCount
 toCColumnCount n = CColumnCount (fromIntegral n)
 
-newtype CNumBytes = CNumBytes CInt
-    deriving (Eq, Ord, Show)
+toCNumBytes :: Integral a => a -> CNumBytes
+toCNumBytes n = CNumBytes (fromIntegral n)
 
 -- | <http://www.sqlite.org/c3ref/c_static.html>
 --
