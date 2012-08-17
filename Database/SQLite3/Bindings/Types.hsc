@@ -132,6 +132,10 @@ c_SQLITE_TRANSIENT = intPtrToPtr (-1)
 newtype CError = CError CInt
     deriving Show
 
+instance Enum CError where
+    toEnum n            = CError (toEnum n)
+    fromEnum (CError n) = fromEnum n
+
 decodeError :: CError -> Maybe Error
 decodeError (CError n) = case n of
     #{const SQLITE_OK}         -> Just ErrorOK
